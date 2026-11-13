@@ -1,114 +1,71 @@
+import { useRef } from 'react'
 import { portfolioConfig } from '@/data/portfolio.config'
-import { SectionLabel } from './SectionLabel'
+import { useTilt } from '@/lib/hooks'
+import SectionHeading from './ui/SectionHeading'
+import Icon from './ui/Icons'
+import styles from './Achievements.module.css'
 
-const cardStyle = {
-  background: 'rgba(13,21,37,0.7)',
-  border: '1px solid rgba(0,229,160,0.08)',
-  borderRadius: '12px',
-  padding: '1.5rem',
-  backdropFilter: 'blur(10px)',
-}
+function AchievementCard({ item, index }) {
+  const card = useRef(null)
+  useTilt(card, 10)
 
-const tagStyle = {
-  display: 'inline-block',
-  padding: '3px 12px',
-  borderRadius: '100px',
-  border: '1px solid',
-  fontSize: '11px',
-  fontFamily: "'Space Mono', monospace",
-  letterSpacing: '0.05em',
+  return (
+    <div data-reveal>
+      <div
+        ref={card}
+        className={`card tilt ${styles.card} ${index === 0 ? styles.featured : ''}`}
+        data-spotlight
+      >
+        <span className="tilt-glare" />
+        <div className={styles.top}>
+          <span className={styles.iconTile}>
+            <Icon name={item.icon} size={30} />
+          </span>
+          <span className={styles.rank}>0{index + 1}</span>
+        </div>
+        <div className={styles.title}>{item.title}</div>
+        <div className={styles.event}>{item.event}</div>
+        <div className={styles.project}>
+          <span className={styles.projectLine} />
+          {item.project}
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default function Achievements() {
-  const { achievements, organizations } = portfolioConfig
+  const { achievements, organizations, headings } = portfolioConfig
 
   return (
-    <section
-      id="achievements"
-      style={{
-        padding: '6rem 2rem',
-        maxWidth: '1100px',
-        margin: '0 auto',
-      }}
-    >
-      <SectionLabel>Achievements & Orgs</SectionLabel>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '1.5rem',
-          marginTop: '3rem',
-        }}
-      >
-        {achievements.map((a, i) => (
-          <div
-            key={i}
-            style={{
-              ...cardStyle,
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: '1rem',
-            }}
-          >
-            <div style={{ fontSize: '28px', flexShrink: 0 }}>{a.icon}</div>
-            <div>
-              <div
-                style={{
-                  fontFamily: "'Bebas Neue'",
-                  fontSize: '22px',
-                  color: 'var(--accent)',
-                  lineHeight: 1,
-                }}
-              >
-                {a.title}
-              </div>
-              <div style={{ fontSize: '14px', fontWeight: 500, marginTop: '2px', marginBottom: '4px' }}>
-                {a.event}
-              </div>
-              <div style={{ fontSize: '13px', color: 'var(--muted)' }}>
-                {a.project}
+    <section id="achievements" className="section">
+      <div className="container">
+        <SectionHeading index="05" label="Achievements" title={headings.achievements} />
+
+        <div className={styles.grid}>
+          {achievements.map((a, i) => (
+            <AchievementCard key={a.event} item={a} index={i} />
+          ))}
+        </div>
+
+        {organizations.map(org => (
+          <div key={org.name} className={`card ${styles.org}`} data-spotlight data-reveal>
+            <span className={styles.orgGhost} aria-hidden="true">
+              {org.name}
+            </span>
+            <div className={styles.orgHead}>
+              <span className={styles.orgIcon}>
+                <Icon name="code" size={26} />
+              </span>
+              <div>
+                <h3 className={styles.orgName}>{org.name}</h3>
+                <span className={styles.orgRole}>{org.role}</span>
               </div>
             </div>
+            <p className={styles.orgDesc}>{org.desc}</p>
           </div>
         ))}
       </div>
-
-      {/* Organizations */}
-      {organizations.map((org, i) => (
-        <div key={i} style={{ ...cardStyle, marginTop: '1.5rem' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-              marginBottom: '0.75rem',
-            }}
-          >
-            <div
-              style={{
-                fontFamily: "'Bebas Neue'",
-                fontSize: '28px',
-                color: 'var(--accent2)',
-              }}
-            >
-              {org.name}
-            </div>
-            <span
-              style={{
-                ...tagStyle,
-                borderColor: 'rgba(0,184,255,0.3)',
-                color: 'var(--accent2)',
-                background: 'rgba(0,184,255,0.08)',
-              }}
-            >
-              {org.role}
-            </span>
-          </div>
-          <p style={{ color: 'var(--muted)', fontSize: '15px' }}>
-            {org.desc}
-          </p>
-        </div>
-      ))}
     </section>
   )
 }

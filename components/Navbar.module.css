@@ -1,0 +1,263 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px var(--gutter);
+  transition: transform 0.7s var(--ease-out), padding 0.5s var(--ease-out);
+}
+
+.nav[data-hidden='true'] { transform: translateY(-120%); }
+.nav[data-scrolled='true'] { padding-block: 12px; }
+
+/* ── Logo ─────────────────────────────────────────────────────────────────── */
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: conic-gradient(from 180deg, var(--accent), var(--accent2), var(--accent3), var(--accent));
+  color: var(--on-accent);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -0.02em;
+  transition: transform 0.6s var(--ease-out), border-radius 0.6s var(--ease-out);
+}
+
+.logo:hover .mark { transform: rotate(-12deg) scale(1.05); border-radius: 50%; }
+
+.logoText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.logoText strong {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+.logoText small {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ── Center links (glass pill) ────────────────────────────────────────────── */
+
+.links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  padding: 5px;
+  border-radius: 100px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+}
+
+.indicator {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  left: 0;
+  border-radius: 100px;
+  background: var(--text);
+  opacity: 0;
+  transition: transform 0.6s var(--ease-out), width 0.6s var(--ease-out), opacity 0.3s ease;
+}
+
+.link {
+  position: relative;
+  z-index: 1;
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  transition: color 0.4s ease;
+}
+
+.link:hover { color: var(--text); }
+.link[data-active='true'] { color: var(--bg); }
+
+/* ── Actions ──────────────────────────────────────────────────────────────── */
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toggle {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+  backdrop-filter: blur(18px);
+  color: var(--text);
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+.toggleIcon { overflow: visible; transition: transform 0.7s var(--ease-out); }
+.toggleIcon[data-dark='true'] { transform: rotate(40deg); }
+
+.sunCore { transition: r 0.6s var(--ease-out); }
+.moonCut { transition: cx 0.6s var(--ease-out), cy 0.6s var(--ease-out); }
+.rays { transition: opacity 0.4s ease, transform 0.6s var(--ease-out); transform-origin: 12px 12px; }
+
+/* Dark mode shows the moon (sun core with a bite, no rays) */
+.toggleIcon[data-dark='true'] .sunCore { r: 9px; }
+.toggleIcon[data-dark='true'] .moonCut { cx: 17px; cy: 6px; }
+.toggleIcon[data-dark='true'] .rays { opacity: 0; transform: scale(0.5); }
+
+.hire {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 100px;
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.hire:hover { background: var(--accent); color: var(--on-accent); }
+
+.hireDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+.hire:hover .hireDot { background: var(--on-accent); box-shadow: none; }
+
+.burger {
+  display: none;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--text);
+}
+
+.burger span {
+  position: absolute;
+  left: 13px;
+  right: 13px;
+  height: 1.5px;
+  background: var(--bg);
+  transition: transform 0.5s var(--ease-out);
+}
+
+.burger span:first-child { transform: translateY(-3px); }
+.burger span:last-child { transform: translateY(3px); }
+.burger[data-open='true'] span:first-child { transform: rotate(45deg); }
+.burger[data-open='true'] span:last-child { transform: rotate(-45deg); }
+
+/* ── Full-screen menu ─────────────────────────────────────────────────────── */
+
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 290;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 110px var(--gutter) 40px;
+  background: var(--bg-elev);
+  clip-path: circle(0% at calc(100% - 40px) 40px);
+  transition: clip-path 0.9s var(--ease-in-out);
+  pointer-events: none;
+}
+
+.menu[data-open='true'] {
+  clip-path: circle(150% at calc(100% - 40px) 40px);
+  pointer-events: auto;
+}
+
+.menuLinks {
+  display: flex;
+  flex-direction: column;
+}
+
+.menuLink {
+  display: block;
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(40px, 11vw, 88px);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.menuLink span { display: inline-flex; align-items: flex-start; gap: 12px; }
+.menuLink small {
+  margin-top: 0.5em;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+.menuLink:hover { color: var(--accent); }
+
+.menuFoot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.menuSocials { display: flex; gap: 18px; }
+.menuSocials a:hover { color: var(--accent); }
+
+@media (max-width: 1100px) {
+  .links { display: none; }
+  .burger { display: block; }
+}
+
+@media (max-width: 560px) {
+  .logoText,
+  .hire { display: none; }
+}

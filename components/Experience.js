@@ -1,133 +1,88 @@
+import { useEffect, useRef } from 'react'
 import { portfolioConfig } from '@/data/portfolio.config'
-import { SectionLabel } from './SectionLabel'
+import { gsap, ScrollTrigger } from '@/lib/gsap'
+import { prefersReducedMotion } from '@/lib/motion'
+import { useTilt } from '@/lib/hooks'
+import SectionHeading from './ui/SectionHeading'
+import styles from './Experience.module.css'
 
-const cardStyle = {
-  background: 'rgba(13,21,37,0.7)',
-  border: '1px solid rgba(0,229,160,0.08)',
-  borderRadius: '12px',
-  padding: '1.5rem',
-  backdropFilter: 'blur(10px)',
+function ExperienceCard({ exp, index }) {
+  const card = useRef(null)
+  useTilt(card, 4)
+
+  return (
+    <div className={`card tilt ${styles.card}`} ref={card} data-spotlight style={{ '--c': exp.color }}>
+      <span className="tilt-glare" />
+      <div className={styles.cardTop}>
+        <span className={styles.bigIndex}>0{index + 1}</span>
+        <span className={styles.type}>{exp.type}</span>
+      </div>
+      <h3 className={styles.role}>{exp.role}</h3>
+      <div className={styles.company}>
+        <span className={styles.companyDot} />
+        {exp.company}
+      </div>
+      <ul className={styles.points}>
+        {exp.points.map((pt, j) => (
+          <li key={j}>{pt}</li>
+        ))}
+      </ul>
+    </div>
+  )
 }
 
 export default function Experience() {
-  const { experience } = portfolioConfig
+  const { experience, headings } = portfolioConfig
+  const root = useRef(null)
+
+  useEffect(() => {
+    if (prefersReducedMotion()) return
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        `.${styles.lineFill}`,
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: 'none',
+          scrollTrigger: { trigger: `.${styles.timeline}`, start: 'top 65%', end: 'bottom 65%', scrub: 0.5 },
+        },
+      )
+      gsap.utils.toArray(`.${styles.item}`).forEach(item => {
+        ScrollTrigger.create({
+          trigger: item,
+          start: 'top 65%',
+          toggleClass: { targets: item, className: styles.lit },
+        })
+      })
+    }, root)
+    return () => ctx.revert()
+  }, [])
 
   return (
-    <section
-      id="experience"
-      style={{
-        padding: '6rem 2rem',
-        maxWidth: '1100px',
-        margin: '0 auto',
-      }}
-    >
-      <SectionLabel>Experience</SectionLabel>
-      <div
-        style={{
-          marginTop: '3rem',
-          position: 'relative',
-        }}
-      >
-        {/* Timeline line */}
-        <div
-          style={{
-            position: 'absolute',
-            left: '0',
-            top: 0,
-            bottom: 0,
-            width: '1px',
-            background: 'linear-gradient(var(--accent), transparent)',
-            marginLeft: '7px',
-          }}
-        />
+    <section id="experience" className="section" ref={root}>
+      <div className="container">
+        <SectionHeading index="03" label="Experience" title={headings.experience} />
 
-        {experience.map((exp, i) => (
-          <div
-            key={i}
-            style={{
-              paddingLeft: '3rem',
-              marginBottom: '3rem',
-              position: 'relative',
-            }}
-          >
-            {/* Dot */}
-            <div
-              style={{
-                position: 'absolute',
-                left: 0,
-                top: '6px',
-                width: '15px',
-                height: '15px',
-                borderRadius: '50%',
-                border: `2px solid ${exp.color}`,
-                background: 'var(--bg)',
-                boxShadow: `0 0 10px ${exp.color}60`,
-              }}
-            />
-
-            <div style={cardStyle}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-start',
-                  flexWrap: 'wrap',
-                  gap: '0.5rem',
-                  marginBottom: '0.75rem',
-                }}
-              >
-                <div>
-                  <h3
-                    style={{
-                      fontSize: '18px',
-                      fontWeight: 500,
-                      color: 'var(--text)',
-                      marginBottom: '2px',
-                    }}
-                  >
-                    {exp.role}
-                  </h3>
-                  <div
-                    style={{
-                      fontFamily: "'Space Mono'",
-                      fontSize: '12px',
-                      color: exp.color,
-                    }}
-                  >
-                    {exp.company}
-                  </div>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <div
-                    style={{
-                      fontFamily: "'Space Mono'",
-                      fontSize: '11px',
-                      color: 'var(--muted)',
-                    }}
-                  >
-                    {exp.period}
-                  </div>
-                  <div style={{ fontSize: '12px', color: 'var(--muted)' }}>
-                    {exp.type}
-                  </div>
-                </div>
-              </div>
-              <ul
-                style={{
-                  paddingLeft: '1rem',
-                  color: 'var(--muted)',
-                  fontSize: '15px',
-                }}
-              >
-                {exp.points.map((pt, j) => (
-                  <li key={j} style={{ marginBottom: '6px' }}>
-                    {pt}
-                  </li>
-                ))}
-              </ul>
-            </div>
+        <div className={styles.timeline}>
+          <div className={styles.line} aria-hidden="true">
+            <div className={styles.lineFill} />
           </div>
-        ))}
+
+          {experience.map((exp, i) => (
+            <article key={exp.company} className={styles.item} style={{ '--c': exp.color }}>
+              <div className={styles.when} data-reveal>
+                <span className={styles.period}>{exp.period}</span>
+                <span className={styles.companySmall}>{exp.company}</span>
+              </div>
+              <div className={styles.node} aria-hidden="true">
+                <span />
+              </div>
+              <div data-reveal>
+                <ExperienceCard exp={exp} index={i} />
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   )

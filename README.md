@@ -1,11 +1,29 @@
 # G O Ashwin Praveen — Portfolio
 
-A professional Next.js portfolio with dark cyber-tech aesthetic.
+An immersive, animated Next.js portfolio: real-time WebGL hero, smooth scrolling,
+scroll-driven storytelling and 3D interactions throughout.
 
 ## Tech Stack
-- **Next.js 14** (static export)
-- **Google Fonts** — Bebas Neue, Space Mono, DM Sans
-- Pure CSS animations, no extra libraries
+- **Next.js 16** (static export, pages router)
+- **three.js** — custom GLSL shaders for the hero orb, particles and orbit rings
+- **GSAP + ScrollTrigger** — intro timelines, scroll reveals, pinned horizontal projects
+- **Lenis** — smooth scrolling synced to GSAP
+- **CSS Modules** with theme tokens (dark / light)
+- **Google Fonts** — Syne, Instrument Serif, DM Sans, JetBrains Mono
+
+## What's inside
+- Preloader with counter and shutter reveal
+- WebGL hero: noise-morphing iridescent orb, wireframe cage, orbit rings with satellites,
+  particle belt and starfield, all reacting to the pointer and scroll
+- Masked character reveals, scramble-text role rotator, count-up stats
+- Holographic 3D-tilt photo card, scroll-scrubbed manifesto, rotating badge
+- Velocity-reactive marquee bands
+- Draggable 3D skills globe (canvas)
+- Scroll-drawn experience timeline
+- Pinned horizontal project gallery with 3D tilt cards and parallax
+- Pointer spotlight cards, magnetic buttons, custom cursor
+- Circular view-transition theme switch, live local clock, scroll progress bar
+- Respects `prefers-reduced-motion`, falls back gracefully without WebGL
 
 ## Local Development
 
@@ -15,41 +33,28 @@ npm run dev
 # Open http://localhost:3000
 ```
 
-## Deploy to Vercel (Recommended — FREE)
-
-1. Push this folder to a GitHub repository
-2. Go to [vercel.com](https://vercel.com) → New Project
-3. Import your GitHub repo
-4. Click **Deploy** — done! ✅
-
-Vercel auto-detects Next.js. Zero config needed.
-
-## Deploy to Netlify
-
-1. Push to GitHub
-2. Go to [netlify.com](https://netlify.com) → New site from Git
-3. Build command: `npm run build`
-4. Publish directory: `out`
-5. Deploy!
-
-## Deploy to GitHub Pages
+## Build
 
 ```bash
-npm run build   # generates /out folder
-# Push /out folder contents to gh-pages branch
+npm run build   # static site in /out
 ```
+
+## Deploy
+
+- **Vercel**: import the repo and deploy — zero config.
+- **Netlify**: build command `npm run build`, publish directory `out`.
+- **GitHub Pages**: push the contents of `/out` to a `gh-pages` branch.
 
 ## Customization
 
-All content is in one place — edit the `data` object at the top of `pages/index.js`:
-- Update `links` with your real LinkedIn/GitHub/GitLab URLs
-- Add your project links
-- Update the `summary` text
-- Add more projects to the `projects` array
+All content lives in `data/portfolio.config.js`:
+- `personal` — name, hero lines (`displayName`), rotating `roles`, contact details
+- `about`, `headings` (wrap a word in `*asterisks*` for the accent serif), `marquee`
+- `skills`, `experience`, `projects`, `achievements`, `organizations`, `education`
+- `sections` — toggle any section (including the preloader) on or off
 
-## Adding Your Photo
+Theme colors are CSS variables at the top of `styles/globals.css`
+(`:root` for dark, `[data-theme='light']` for light). The 3D scene and skills
+globe read the same variables, so changing `--accent` recolors everything.
 
-Place `photo.jpg` in `/public/` folder and add this to the Hero section:
-```jsx
-<img src="/photo.jpg" alt="Ashwin" style={{ width: '200px', borderRadius: '50%' }} />
-```
+Your photo is `public/photo.jpg`.

@@ -1,69 +1,44 @@
 import { portfolioConfig } from '@/data/portfolio.config'
-import { SectionLabel } from './SectionLabel'
+import SectionHeading from './ui/SectionHeading'
+import CountUp from './ui/CountUp'
+import styles from './Education.module.css'
 
-const cardStyle = {
-  background: 'rgba(13,21,37,0.7)',
-  border: '1px solid rgba(0,229,160,0.08)',
-  borderRadius: '12px',
-  padding: '1.5rem',
-  backdropFilter: 'blur(10px)',
+// "CGPA 9.5 / 10" -> { value: '9.5', label: 'CGPA / 10' }; "95.6%" -> { value: '95.6%', label: 'Score' }
+function splitScore(score) {
+  const match = score.match(/\d+(?:\.\d+)?%?/)
+  if (!match) return { value: score, label: '' }
+  const label = score.replace(match[0], '').replace(/\s+/g, ' ').trim()
+  return { value: match[0], label: label || 'Score' }
 }
 
 export default function Education() {
-  const { education } = portfolioConfig
+  const { education, headings } = portfolioConfig
 
   return (
-    <section
-      style={{
-        padding: '6rem 2rem',
-        maxWidth: '1100px',
-        margin: '0 auto',
-      }}
-    >
-      <SectionLabel>Education</SectionLabel>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '1.5rem',
-          marginTop: '3rem',
-        }}
-      >
-        {education.map((e, i) => (
-          <div key={i} style={cardStyle}>
-            <div
-              style={{
-                fontFamily: "'Bebas Neue'",
-                fontSize: '32px',
-                color: 'var(--accent)',
-                lineHeight: 1,
-                marginBottom: '4px',
-              }}
-            >
-              {e.score}
-            </div>
-            <div style={{ fontSize: '15px', fontWeight: 500, marginBottom: '4px' }}>
-              {e.inst}
-            </div>
-            <div style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '8px' }}>
-              {e.degree}
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                fontFamily: "'Space Mono'",
-                fontSize: '11px',
-                color: 'var(--muted)',
-                borderTop: '1px solid rgba(255,255,255,0.05)',
-                paddingTop: '10px',
-              }}
-            >
-              <span>{e.loc}</span>
-              <span>{e.year}</span>
-            </div>
-          </div>
-        ))}
+    <section id="education" className="section">
+      <div className="container">
+        <SectionHeading index="06" label="Education" title={headings.education} />
+
+        <div className={styles.rows}>
+          {education.map(e => {
+            const score = splitScore(e.score)
+            return (
+              <div key={e.degree} className={styles.row} data-reveal>
+                <span className={styles.fill} aria-hidden="true" />
+                <span className={styles.year}>{e.year}</span>
+                <div className={styles.main}>
+                  <h3 className={styles.inst}>{e.inst}</h3>
+                  <p className={styles.degree}>{e.degree}</p>
+                </div>
+                <span className={styles.loc}>{e.loc}</span>
+                <span className={styles.score}>
+                  <CountUp value={score.value} className={styles.scoreValue} />
+                  <span className={styles.scoreLabel}>{score.label}</span>
+                </span>
+              </div>
+            )
+          })}
+        </div>
       </div>
     </section>
   )

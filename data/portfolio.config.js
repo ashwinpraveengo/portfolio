@@ -16,8 +16,50 @@ export const portfolioConfig = {
     phone: '6238170626',
     cgpa: '9.5',
     summary: 'Aspiring CS undergraduate building scalable web and mobile applications and real-time platforms. Proven in leading projects and delivering production-ready solutions. Passionate about creating technology that improves everyday life through thoughtful, user-focused engineering.',
-    profilePhoto: '/photo.jpg', 
+    profilePhoto: '/photo.jpg',
+    // Hero name, one entry per line (second line renders outlined)
+    displayName: ['G O ASHWIN', 'PRAVEEN'],
+    availability: 'Open to opportunities · 2027 Grad',
+    // Cycled with a scramble effect in the hero: "I build ___"
+    roles: [
+      'scalable web apps',
+      'cross-platform mobile apps',
+      'real-time platforms',
+      'AI-powered tools',
+    ],
+    timezone: 'Asia/Kolkata',
+    timezoneLabel: 'IST',
   },
+
+  // ── About ───────────────────────────────────────────────────────────────
+  about: {
+    // Words from personal.summary that get the accent color as you scroll
+    highlights: ['scalable', 'real-time', 'production-ready', 'improves', 'everyday', 'life'],
+    facts: [
+      { label: 'Based in', value: 'Kannur, Kerala' },
+      { label: 'Studying', value: 'B.Tech CSE · Amrita' },
+      { label: 'Focus', value: 'Web · Mobile · Real-time' },
+      { label: 'Status', value: 'Open to internships' },
+    ],
+    badge: 'OPEN TO WORK • FULL STACK • MOBILE • ',
+  },
+
+  // ── Section headings (*word* renders in the accent serif) ─────────────────
+  headings: {
+    about: 'Engineering ideas into *experiences*',
+    skills: 'The *toolkit*',
+    experience: 'Where I have *shipped*',
+    projects: 'Selected *work*',
+    achievements: 'Wins & *community*',
+    education: 'Academic *foundation*',
+  },
+
+  ledes: {
+    projects: 'From platforms in production to award-winning hackathon builds — designed, engineered and shipped end to end.',
+  },
+
+  // ── Marquee bands between sections ──────────────────────────────────────
+  marquee: ['Full Stack', 'Mobile', 'Real-time', 'Open Source', 'UI / UX', 'Hackathons', 'APIs'],
 
   links: {
     linkedin: 'https://www.linkedin.com/in/ashwinpraveengo/',
@@ -117,19 +159,19 @@ export const portfolioConfig = {
       title: 'Runner-Up',
       event: 'OLabs Hackathon 2025',
       project: 'Colaba AI',
-      icon: '🥈',
+      icon: 'trophy',
     },
     {
       title: 'Finalist',
       event: 'Evolumin Hackathon 2024',
       project: 'VitaCare',
-      icon: '🏅',
+      icon: 'medal',
     },
     {
       title: 'Participant',
       event: 'Indic Wikimedia Hackathon, Kochi 2025',
       project: 'Open-source collaboration',
-      icon: '🌐',
+      icon: 'globe',
     },
   ],
 
@@ -181,33 +223,15 @@ export const portfolioConfig = {
     message: 'I\'m currently open to internship opportunities and freelance projects. Let\'s build something great.',
   },
 
-  // ── Theme Configuration ────────────────────────────────────────────────
-  theme: {
-    dark: {
-      bg: '#060c16',
-      text: '#f0f0f0',
-      muted: '#a0a8b8',
-      accent: '#00e5a0',
-      accent2: '#00b8ff',
-      card: 'rgba(13,21,37,0.7)',
-      border: 'rgba(0,229,160,0.08)',
-    },
-    light: {
-      bg: '#f8f9fa',
-      text: '#0a0e14',
-      muted: '#6b7280',
-      accent: '#00d691',
-      accent2: '#0099dd',
-      card: 'rgba(255,255,255,0.9)',
-      border: 'rgba(0,214,143,0.12)',
-    },
-  },
 
   // ── Section Visibility ────────────────────────────────────────────────
   // Set to false to hide sections from the portfolio without deleting code
   sections: {
+    preloader: true,
     navbar: true,
     hero: true,
+    about: true,
+    marquee: true,
     skills: true,
     experience: true,
     projects: true,
@@ -221,6 +245,7 @@ export const portfolioConfig = {
 // ── Navigation Items (Auto-generated from sections) ────────────────────────
 export const navItems = [
   'About',
+  'Skills',
   'Experience',
   'Projects',
   'Achievements',

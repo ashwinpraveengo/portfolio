@@ -1,129 +1,101 @@
+import { useRef, useState } from 'react'
 import { portfolioConfig } from '@/data/portfolio.config'
-import { SectionLabel } from './SectionLabel'
+import { useMagnetic } from '@/lib/hooks'
+import SectionHeading from './ui/SectionHeading'
+import SplitText from './ui/SplitText'
+import Icon from './ui/Icons'
+import styles from './Contact.module.css'
 
-const btnPrimary = {
-  display: 'inline-block',
-  padding: '14px 32px',
-  background: 'var(--accent)',
-  color: '#000',
-  borderRadius: '6px',
-  fontWeight: 600,
-  fontSize: '14px',
-  letterSpacing: '0.03em',
-  transition: 'transform 0.2s, box-shadow 0.2s',
-  textDecoration: 'none',
-  cursor: 'pointer',
-  border: 'none',
-}
-
-const btnSecondary = {
-  display: 'inline-block',
-  padding: '14px 32px',
-  background: 'transparent',
-  color: 'var(--text)',
-  border: '1px solid rgba(255,255,255,0.15)',
-  borderRadius: '6px',
-  fontSize: '14px',
-  letterSpacing: '0.03em',
-  transition: 'border-color 0.2s',
-  textDecoration: 'none',
-  cursor: 'pointer',
+function TalkButton({ href }) {
+  const ref = useRef(null)
+  useMagnetic(ref, 0.45)
+  return (
+    <a ref={ref} href={href} className={styles.talk} data-cursor>
+      <span className={styles.talkFill} aria-hidden="true" />
+      <span className={styles.talkLabel}>
+        Let&apos;s talk
+        <Icon name="arrowUpRight" size={22} />
+      </span>
+    </a>
+  )
 }
 
 export default function Contact() {
   const { personal, links, contact } = portfolioConfig
+  const [copied, setCopied] = useState(false)
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(personal.email)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      window.location.href = `mailto:${personal.email}`
+    }
+  }
+
+  const socials = [
+    { label: 'LinkedIn', icon: 'linkedin', href: links.linkedin },
+    { label: 'GitHub', icon: 'github', href: links.github },
+    { label: 'GitLab', icon: 'gitlab', href: links.gitlab },
+  ]
 
   return (
-    <section
-      id="contact"
-      style={{
-        padding: '8rem 2rem',
-        textAlign: 'center',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'radial-gradient(ellipse at center, rgba(0,229,160,0.04) 0%, transparent 70%)',
-        }}
-      />
-      <div style={{ position: 'relative', zIndex: 1 }}>
-        <SectionLabel centered>Let&apos;s Work Together</SectionLabel>
-        <h2
-          style={{
-            fontFamily: "'Bebas Neue'",
-            fontSize: 'clamp(48px, 8vw, 100px)',
-            lineHeight: 0.95,
-            marginTop: '1.5rem',
-            marginBottom: '1.5rem',
-          }}
-        >
-          <span style={{ color: 'var(--text)' }}>{contact.heading}</span>
-          <br />
-          <span
-            style={{
-              WebkitTextStroke: '1px var(--accent)',
-              color: 'transparent',
-            }}
-          >
-            {contact.headingHighlight}
-          </span>
+    <section id="contact" className={`section ${styles.contact}`}>
+      <div className={styles.aurora} aria-hidden="true">
+        <span />
+        <span />
+        <span />
+      </div>
+
+      <div className="container">
+        <SectionHeading index="07" label="Contact" />
+
+        <h2 className={styles.heading}>
+          <SplitText text={contact.heading} className={styles.line} data-split />
+          <SplitText text={contact.headingHighlight} className={`${styles.line} ${styles.outline}`} data-split />
         </h2>
-        <p
-          style={{
-            color: 'var(--muted)',
-            fontSize: '17px',
-            maxWidth: '480px',
-            margin: '0 auto 3rem',
-          }}
-        >
-          {contact.message}
-        </p>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '1rem',
-            flexWrap: 'wrap',
-            marginBottom: '3rem',
-          }}
-        >
-          <a href={`mailto:${personal.email}`} style={btnPrimary}>
-            {personal.email}
-          </a>
-          <a href={`tel:${personal.phone}`} style={btnSecondary}>
-            {personal.phone}
-          </a>
+
+        <div className={styles.row}>
+          <p className={styles.message} data-reveal>
+            {contact.message}
+          </p>
+          <div data-reveal>
+            <TalkButton href={`mailto:${personal.email}`} />
+          </div>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem' }}>
-          {[
-            { label: 'LinkedIn', href: links.linkedin },
-            { label: 'GitHub', href: links.github },
-            { label: 'GitLab', href: links.gitlab },
-          ].map(l => (
-            <a
-              key={l.label}
-              href={l.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                fontFamily: "'Space Mono'",
-                fontSize: '12px',
-                color: 'var(--muted)',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                transition: 'color 0.2s',
-                textDecoration: 'none',
-              }}
-              onMouseEnter={e => (e.target.style.color = 'var(--accent)')}
-              onMouseLeave={e => (e.target.style.color = 'var(--muted)')}
-            >
-              {l.label}
-            </a>
-          ))}
+
+        <div className={styles.channels}>
+          <button type="button" className={styles.channel} onClick={copyEmail} data-reveal>
+            <span className={styles.channelLabel}>
+              <Icon name="mail" size={16} /> Email
+            </span>
+            <span className={styles.channelValue}>{personal.email}</span>
+            <span className={styles.channelAction} data-copied={copied}>
+              <Icon name={copied ? 'check' : 'copy'} size={16} />
+              {copied ? 'Copied' : 'Copy'}
+            </span>
+          </button>
+
+          <a href={`tel:${personal.phone}`} className={styles.channel} data-reveal>
+            <span className={styles.channelLabel}>
+              <Icon name="phone" size={16} /> Phone
+            </span>
+            <span className={styles.channelValue}>+91 {personal.phone}</span>
+            <span className={styles.channelAction}>
+              <Icon name="arrowUpRight" size={16} /> Call
+            </span>
+          </a>
+
+          <div className={styles.socials} data-reveal>
+            {socials.map(s => (
+              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className={styles.social}>
+                <Icon name={s.icon} size={20} />
+                <span>{s.label}</span>
+                <Icon name="arrowUpRight" size={16} className={styles.socialArrow} />
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </section>
